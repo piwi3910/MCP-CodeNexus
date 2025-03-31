@@ -37,27 +37,16 @@ if (dbType === "postgres") {
 } else {
   // SQLite configuration (default)
   // Ensure the data directory exists
-  const dataDir = path.join(process.cwd(), "data");
-  fs.ensureDirSync(dataDir);
-  
-  let dbPath;
-  if (process.env.DB_DATABASE) {
-    // Handle relative paths correctly
-    // If it's an absolute path, use it directly
-    if (path.isAbsolute(process.env.DB_DATABASE)) {
-      dbPath = process.env.DB_DATABASE;
-      
-      // Ensure the directory exists
-      const dbDir = path.dirname(dbPath);
-      fs.ensureDirSync(dbDir);
-    } else {
-      // Relative path - join with current working directory
-      dbPath = path.join(process.cwd(), process.env.DB_DATABASE);
-    }
-  } else {
-    dbPath = path.join(dataDir, "codenexus.sqlite");
+  // Use an absolute path to avoid any path resolution issues
+  const dataDir = "/Users/pascal/Documents/git/MCP-CodeNexus/data";
+  console.log(`Ensuring data directory exists: ${dataDir}`);
+  try {
+    fs.ensureDirSync(dataDir);
+  } catch (error) {
+    console.error(`Error creating data directory: ${error}`);
   }
-    
+  
+  const dbPath = path.join(dataDir, "codenexus.sqlite");
   dataSourceOptions = {
     type: "sqlite",
     database: dbPath,
