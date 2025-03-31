@@ -40,9 +40,15 @@ if (dbType === "postgres") {
   const dataDir = path.join(process.cwd(), "data");
   fs.ensureDirSync(dataDir);
   
-  const dbPath = process.env.DB_DATABASE 
-    ? path.resolve(process.env.DB_DATABASE)
-    : path.join(dataDir, "codenexus.sqlite");
+  let dbPath;
+  if (process.env.DB_DATABASE) {
+    // Handle relative paths correctly
+    dbPath = process.env.DB_DATABASE.startsWith('/') 
+      ? process.env.DB_DATABASE  // Absolute path
+      : path.join(process.cwd(), process.env.DB_DATABASE);  // Relative path
+  } else {
+    dbPath = path.join(dataDir, "codenexus.sqlite");
+  }
     
   dataSourceOptions = {
     type: "sqlite",
