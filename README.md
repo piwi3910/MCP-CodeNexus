@@ -7,8 +7,9 @@ MCP-CodeNexus is a Model Context Protocol (MCP) server that acts as a knowledge 
 - Track API endpoints and their schemas
 - Track functions, their purpose, and where they're used
 - Support for both backend and frontend applications
-- Store data in a PostgreSQL database for persistence and scalability
-- TypeORM integration for object-relational mapping
+- Store data in either SQLite (default) or PostgreSQL database for persistence
+- SQLite for easy setup and development
+- PostgreSQL option for production scalability
 - Query stored information to assist with development tasks
 
 ## Installation
@@ -24,14 +25,16 @@ npm install
 # Build the project
 npm run build
 
-# Set up PostgreSQL
-# Make sure PostgreSQL is installed and running
-# Create a database named 'codenexus'
-createdb codenexus
-
-# Run database migrations to set up the schema
-# This will create all necessary tables in the database
+# Run database migrations to set up the SQLite database (default)
+# This will create all necessary tables in the SQLite database
 # Warning: This will drop existing tables if they exist
+npm run migrate
+
+# Optional: Set up PostgreSQL instead of SQLite
+# 1. Update .env file to use PostgreSQL (see Configuration section)
+# 2. Make sure PostgreSQL is installed and running
+# 3. Create a database named 'codenexus'
+# 4. Run migrations
 npm run migrate
 ```
 
@@ -40,14 +43,24 @@ npm run migrate
 Create a `.env` file in the root directory with the following content:
 
 ```
+# SQLite Configuration (Default)
+DB_TYPE=sqlite
+DB_DATABASE=codenexus.sqlite
+
+# OR
+
 # Database Configuration
+DB_TYPE=postgres
 DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
 DB_DATABASE=codenexus
-DB_SYNCHRONIZE=true
-DB_LOGGING=true
+
+# Common settings
+DB_SYNCHRONIZE=false  # Set to true for development only
+DB_LOGGING=false      # Set to true for debugging database queries
+DB_ENTITIES=dist/entities/*.entity.js
 ```
 
 Adjust the values according to your PostgreSQL setup.

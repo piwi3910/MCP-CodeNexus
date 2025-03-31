@@ -19,7 +19,10 @@ enum MessageType {
 interface MCPMessage {
   type: MessageType;
   id: string;
-  [key: string]: any;
+  tool_name?: string;
+  arguments?: Record<string, unknown>;
+  uri?: string;
+  [key: string]: unknown; // For other properties
 }
 
 /**
@@ -211,7 +214,7 @@ class MCPServerMain {
    * Send a response
    * @param response Response object
    */
-  private sendResponse(response: any): void {
+  private sendResponse(response: Record<string, unknown>): void {
     console.log(JSON.stringify(response));
   }
   

@@ -2,15 +2,15 @@ import { StorageManager } from './storage-manager';
 import { Project } from '../models/project';
 import { ApiEndpoint } from '../models/api-endpoint';
 import { Function } from '../models/function';
-import { AppDataSource, initializeDataSource } from '../db/data-source';
+import { initializeDataSource } from '../db/data-source';
 import { ProjectEntity } from '../entities/project.entity';
 import { ApiEndpointEntity } from '../entities/api-endpoint.entity';
 import { FunctionEntity } from '../entities/function.entity';
-import { Repository, Like, In } from 'typeorm';
+import { Repository, Like, Raw } from 'typeorm';
 
 /**
  * TypeORM-based storage implementation for CodeNexus
- * Stores data in a PostgreSQL database using TypeORM
+ * Stores data in a SQLite or PostgreSQL database using TypeORM
  */
 export class TypeORMStorage implements StorageManager {
   private projectRepository: Repository<ProjectEntity>;
@@ -37,7 +37,8 @@ export class TypeORMStorage implements StorageManager {
       this.apiEndpointRepository = dataSource.getRepository(ApiEndpointEntity);
       this.functionRepository = dataSource.getRepository(FunctionEntity);
       
-      console.log('TypeORM storage initialized');
+      const dbType = process.env.DB_TYPE || 'sqlite';
+      console.log(`TypeORM storage initialized with ${dbType} database`);
     } catch (error) {
       console.error('Error initializing TypeORM storage:', error);
       throw error;
@@ -284,7 +285,7 @@ export class TypeORMStorage implements StorageManager {
         where: [
           { path: Like(searchQuery) },
           { description: Like(searchQuery) },
-          { method: Like(searchQuery) }
+          { method: Raw(alias => `LOWER(${alias}) LIKE LOWER('${searchQuery.replace(/%/g, '')}')`) }
         ],
         relations: ['relatedFunctions']
       });
@@ -395,13 +396,13 @@ export class TypeORMStorage implements StorageManager {
     if (model.requestSchema) {
       entity.requestContentType = model.requestSchema.contentType;
       entity.requestDefinition = model.requestSchema.definition;
-      entity.requestExample = model.requestSchema.example || null;
+      entity.requestExample = model.requestSchema.example || '';
     }
     
     if (model.responseSchema) {
       entity.responseContentType = model.responseSchema.contentType;
       entity.responseDefinition = model.responseSchema.definition;
-      entity.responseExample = model.responseSchema.example || null;
+      entity.responseExample = model.responseSchema.example || '';
     }
     
     entity.implementationPath = model.implementationPath;

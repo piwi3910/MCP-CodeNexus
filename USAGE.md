@@ -8,15 +8,16 @@ MCP-CodeNexus is a Model Context Protocol (MCP) server that acts as a knowledge 
 
 1. Tracking of API endpoints and their schemas
 2. Tracking of functions, their purpose, and where they're used
-3. Storage of this information in a PostgreSQL database for persistence and scalability
+3. Storage of this information in either SQLite (default) or PostgreSQL database for persistence
 4. Query capabilities to retrieve stored information
 
 ## Integration with AI Coding Assistants
 
 ### Prerequisites
 
-- Node.js (v14 or later)
-- PostgreSQL (v12 or later)
+- Node.js (v16 or later)
+- SQLite (included, no installation required)
+- PostgreSQL (v12 or later, optional for production use)
 - An AI coding assistant that supports the Model Context Protocol (MCP)
 
 ### Installation
@@ -32,22 +33,30 @@ MCP-CodeNexus is a Model Context Protocol (MCP) server that acts as a knowledge 
    npm install
    ```
    
-3. Set up PostgreSQL:
+3. Build the project:
+   ```bash
+   npm run build
+   ```
+   
+4. Set up the database:
+
+   **SQLite (Default):**
+   - No additional setup required
+   - Run database migrations to set up the schema:
+   ```bash
+   npm run migrate
+   ```
+   
+   **PostgreSQL (Optional):**
    - Make sure PostgreSQL is installed and running
    - Create a database for CodeNexus:
    ```bash
    createdb codenexus
    ```
    
-   - Run database migrations to set up the schema:
-   ```bash
-   npm run migrate
-   ```
-   (Note: This will drop existing tables if they exist)
-   
-4. Configure the database connection:
+5. Configure the database connection:
    - Create a `.env` file in the project root
-   - Set the database connection parameters (see example in README.md)
+   - Set the database connection parameters (see Configuration section in README.md)
    - Adjust the values according to your PostgreSQL setup
    - The database tables will be created automatically when the server starts
 
@@ -61,7 +70,7 @@ MCP-CodeNexus is a Model Context Protocol (MCP) server that acts as a knowledge 
 You can start the MCP server using the following command:
 
 ```bash
-npm run mcp [project_path]
+npm run dev [project_path]
 ```
 
 Where `project_path` is the path to your project's root directory. If not provided, the current working directory will be used.
@@ -75,6 +84,16 @@ For example, with OpenAI's GPT models that support MCP, you would:
 1. Start the MCP server
 2. Tell the AI coding assistant to connect to the MCP server
 3. The AI coding assistant can then use the tools and resources provided by MCP-CodeNexus
+
+### Testing the MCP Server
+
+You can test the MCP server using the included test script:
+
+```bash
+node test-mcp.js
+```
+
+This will connect to the MCP server, create a test project, and perform various operations to verify that the server is working correctly.
 
 ## Available Tools
 
@@ -194,6 +213,10 @@ You can customize how MCP-CodeNexus scans your code by modifying the extraction 
 ### Integration with CI/CD
 
 You can integrate MCP-CodeNexus with your CI/CD pipeline to automatically scan code changes and update the knowledge base.
+
+### Switching from SQLite to PostgreSQL
+
+For production environments with higher scalability requirements, you can switch from SQLite to PostgreSQL by updating the `.env` file as described in the README.md file.
 
 ### Multiple Projects
 

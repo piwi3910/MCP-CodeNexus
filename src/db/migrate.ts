@@ -1,8 +1,5 @@
 import "reflect-metadata";
-import { AppDataSource, initializeDataSource } from "./data-source";
-import { ProjectEntity } from "../entities/project.entity";
-import { ApiEndpointEntity } from "../entities/api-endpoint.entity";
-import { FunctionEntity } from "../entities/function.entity";
+import { initializeDataSource } from "./data-source";
 import * as dotenv from "dotenv";
 
 // Load environment variables

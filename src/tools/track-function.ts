@@ -1,4 +1,4 @@
-import { Function, Parameter, createFunction } from '../models/function';
+import { Parameter, createFunction } from '../models/function';
 import { StorageManager } from '../storage/storage-manager';
 import { extractFunctions } from '../utils/helpers';
 

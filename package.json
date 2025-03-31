@@ -2,14 +2,15 @@
   "name": "mcp-codenexus",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "description": "An MCP server that acts as a knowledge base for tracking code components across projects",
+  "description": "An MCP server that acts as a knowledge base for tracking code components across projects with SQLite or PostgreSQL storage",
   "scripts": {
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "build": "tsc",
     "typeorm": "typeorm-ts-node-commonjs",
     "migrate": "ts-node src/db/migrate.ts",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist data",
+    "reset-db": "rm -rf data && mkdir -p data && npm run migrate",
     "test": "echo \"Error: no test specified\" && exit 1",
     "mcp": "ts-node src/index.ts"
   },
@@ -17,27 +18,39 @@
     "type": "git",
     "url": "git+https://github.com/piwi3910/MCP-CodeNexus.git"
   },
-  "keywords": ["mcp", "model-context-protocol", "code-tracking", "api-documentation", "function-tracking"],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "code-tracking",
+    "api-documentation",
+    "function-tracking"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/piwi3910/MCP-CodeNexus/issues"
   },
   "homepage": "https://github.com/piwi3910/MCP-CodeNexus#readme",
-  "description": "",
   "dependencies": {
     "@types/express": "^5.0.1",
     "@types/fs-extra": "^11.0.4",
-    "@types/pg": "^8.10.9",
     "@types/node": "^22.13.14",
+    "@types/pg": "^8.10.9",
+    "class-validator": "^0.14.0",
+    "dotenv": "^16.3.1",
     "express": "^5.1.0",
     "fs-extra": "^11.3.0",
     "pg": "^8.11.3",
-    "dotenv": "^16.3.1",
-    "typeorm": "^0.3.17",
     "reflect-metadata": "^0.1.13",
-    "class-validator": "^0.14.0",
+    "sqlite3": "^5.1.6",
     "ts-node": "^10.9.2",
+    "typeorm": "^0.3.17",
     "typescript": "^5.8.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "eslint": "^9.23.0",
+    "globals": "^16.0.0",
+    "typescript-eslint": "^8.29.0"
   }
 }

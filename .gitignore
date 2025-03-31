@@ -30,6 +30,9 @@ Thumbs.db
 *.sqlite
 *.db
 
+# Data directory
+data/
+
 # Logs
 logs/
 *.log

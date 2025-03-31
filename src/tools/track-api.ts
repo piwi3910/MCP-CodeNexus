@@ -1,4 +1,4 @@
-import { ApiEndpoint, HttpMethod, Schema, createApiEndpoint } from '../models/api-endpoint';
+import { HttpMethod, createApiEndpoint } from '../models/api-endpoint';
 import { StorageManager } from '../storage/storage-manager';
 import { extractApiEndpoints } from '../utils/helpers';
 

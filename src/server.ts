@@ -5,6 +5,8 @@ import { TrackApiTool } from './tools/track-api';
 import { TrackFunctionTool } from './tools/track-function';
 import { QueryTool } from './tools/query';
 import { Project, createProject } from './models/project';
+import { ApiEndpoint } from './models/api-endpoint';
+import { Function } from './models/function';
 import { findFiles } from './utils/helpers';
 
 /**
@@ -55,7 +57,15 @@ export class CodeNexusServer {
   /**
    * Get the available tools
    */
-  getTools(): any[] {
+  getTools(): Array<{
+    name: string;
+    description: string;
+    input_schema: {
+      type: string;
+      properties: Record<string, unknown>;
+      required: string[];
+    };
+  }> {
     return [
       {
         name: 'create_project',
@@ -511,7 +521,11 @@ export class CodeNexusServer {
   /**
    * Get the available resources
    */
-  getResources(): any[] {
+  getResources(): Array<{
+    name: string;
+    description: string;
+    uri_pattern: string;
+  }> {
     return [
       {
         name: 'projects',
@@ -552,6 +566,7 @@ export class CodeNexusServer {
    * @param args Tool arguments
    * @returns Tool result
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async executeTool(toolName: string, args: any): Promise<any> {
     try {
       switch (toolName) {
@@ -606,7 +621,11 @@ export class CodeNexusServer {
    * @param uri Resource URI
    * @returns Resource data
    */
-  async accessResource(uri: string): Promise<any> {
+  async accessResource(uri: string): Promise<{
+    success: boolean;
+    data?: Project | ApiEndpoint | Function | Project[] | ApiEndpoint[] | Function[];
+    error?: string;
+  }> {
     try {
       // Parse URI
       const uriParts = uri.replace('codenexus://', '').split('/');
@@ -705,7 +724,11 @@ export class CodeNexusServer {
    * @param args Project arguments
    * @returns Creation result
    */
-  private async createProject(args: { name: string; path: string; description: string }): Promise<any> {
+  private async createProject(args: { name: string; path: string; description: string }): Promise<{
+    success: boolean;
+    projectId?: string;
+    error?: string;
+  }> {
     try {
       // Validate input
       if (!args.name) {
@@ -744,7 +767,15 @@ export class CodeNexusServer {
    * @param filePatterns File patterns to scan
    * @returns Scan result
    */
-  private async scanProject(projectId: string, filePatterns: string[] = ['*.ts', '*.js']): Promise<any> {
+  private async scanProject(projectId: string, filePatterns: string[] = ['*.ts', '*.js']): Promise<{
+    success: boolean;
+    scannedFiles?: number;
+    apiEndpoints?: number;
+    functions?: number;
+    apiEndpointIds?: string[];
+    functionIds?: string[];
+    error?: string;
+  }> {
     try {
       // Validate input
       if (!projectId) {

@@ -71,7 +71,10 @@ export class FunctionEntity {
   /**
    * Parameters of the function (stored as JSON)
    */
-  @Column("jsonb")
+  @Column({
+    type: "simple-json",
+    nullable: true
+  })
   parameters: Parameter[];
 
   /**

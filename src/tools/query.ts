@@ -86,7 +86,7 @@ export class QueryTool {
         return { success: false, error: 'Query type is required' };
       }
       
-      let results: Array<Project | ApiEndpoint | Function> = [];
+      const results: Array<Project | ApiEndpoint | Function> = [];
       
       // Query projects
       if (input.type === 'project' || input.type === 'all') {

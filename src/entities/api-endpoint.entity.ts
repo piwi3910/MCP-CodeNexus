@@ -34,10 +34,7 @@ export class ApiEndpointEntity {
   /**
    * HTTP method of the endpoint
    */
-  @Column({
-    type: "enum",
-    enum: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
-  })
+  @Column()
   method: HttpMethod;
 
   /**

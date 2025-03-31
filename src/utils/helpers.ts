@@ -125,8 +125,6 @@ export async function extractApiEndpoints(filePath: string, projectId: string): 
     const methodMatch = methodNamePattern.exec(content);
     
     if (methodMatch) {
-      const methodName = methodMatch[1];
-      
       endpoints.push(createApiEndpoint(
         projectId,
         method,
