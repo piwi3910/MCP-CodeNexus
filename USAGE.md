@@ -97,36 +97,148 @@ This will connect to the MCP server, create a test project, and perform various 
 
 ## Available Tools
 
-MCP-CodeNexus provides the following tools:
+MCP-CodeNexus provides a comprehensive set of tools for tracking and querying code components. Below is a detailed description of each tool:
 
 ### Project Management
 
-- `create_project`: Create a new project to track
-- `get_project`: Get details about a project
-- `scan_project`: Scan a project for API endpoints and functions
+- **create_project**: Create a new project to track
+  - Parameters:
+    - `name`: Project name
+    - `path`: Project path (directory location)
+    - `description`: Project description
+
+- **get_project**: Get details about a project
+  - Parameters:
+    - `projectId`: Project ID
+
+- **scan_project**: Scan a project for API endpoints and functions
+  - Parameters:
+    - `projectId`: Project ID
+    - `filePatterns` (optional): Array of file patterns to scan (e.g., "*.ts", "*.js")
 
 ### API Endpoint Tracking
 
-- `track_api`: Track an API endpoint
-- `scan_file_for_apis`: Scan a file for API endpoints
-- `get_api_endpoint`: Get details about an API endpoint
-- `get_api_endpoints_for_project`: Get all API endpoints for a project
+- **track_api**: Track an API endpoint
+  - Parameters:
+    - `projectId`: Project ID
+    - `method`: HTTP method (GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD)
+    - `path`: Endpoint path
+    - `description`: Endpoint description
+    - `implementationPath`: File path where the endpoint is implemented
+    - `requestSchema` (optional): Request schema details
+      - `contentType`: Content type (e.g., 'application/json')
+      - `definition`: Schema definition
+      - `example` (optional): Example request
+    - `responseSchema` (optional): Response schema details
+      - `contentType`: Content type
+      - `definition`: Schema definition
+      - `example` (optional): Example response
+    - `tags` (optional): Array of tags or categories
+    - `relatedFunctions` (optional): Array of related function IDs
+
+- **scan_file_for_apis**: Scan a file for API endpoints
+  - Parameters:
+    - `projectId`: Project ID
+    - `filePath`: File path to scan
+
+- **get_api_endpoint**: Get details about an API endpoint
+  - Parameters:
+    - `endpointId`: API endpoint ID
+
+- **get_api_endpoints_for_project**: Get all API endpoints for a project
+  - Parameters:
+    - `projectId`: Project ID
+
+- **get_related_functions**: Get related functions for an API endpoint
+  - Parameters:
+    - `endpointId`: API endpoint ID
 
 ### Function Tracking
 
-- `track_function`: Track a function
-- `scan_file_for_functions`: Scan a file for functions
-- `get_function`: Get details about a function
-- `get_functions_for_project`: Get all functions for a project
-- `add_usage_example`: Add a usage example to a function
-- `update_function_purpose`: Update the purpose of a function
+- **track_function**: Track a function
+  - Parameters:
+    - `projectId`: Project ID
+    - `name`: Function name
+    - `description`: Function description
+    - `parameters`: Array of function parameters
+      - `name`: Parameter name
+      - `type`: Parameter type
+      - `description`: Parameter description
+      - `isOptional`: Whether the parameter is optional
+      - `defaultValue` (optional): Default value
+    - `returnType`: Return type of the function
+    - `returnDescription`: Description of the return value
+    - `implementation`: Code snippet of the function implementation
+    - `implementationPath`: File path where the function is implemented
+    - `startLine`: Line number where the function starts
+    - `endLine`: Line number where the function ends
+    - `purpose`: Purpose or reason for implementation
+    - `tags` (optional): Array of tags or categories
+    - `relatedApiEndpoints` (optional): Array of related API endpoint IDs
+    - `relatedFunctions` (optional): Array of related function IDs
+    - `usageExamples` (optional): Array of usage examples
+
+- **scan_file_for_functions**: Scan a file for functions
+  - Parameters:
+    - `projectId`: Project ID
+    - `filePath`: File path to scan
+
+- **get_function**: Get details about a function
+  - Parameters:
+    - `functionId`: Function ID
+
+- **get_functions_for_project**: Get all functions for a project
+  - Parameters:
+    - `projectId`: Project ID
+
+- **add_usage_example**: Add a usage example to a function
+  - Parameters:
+    - `functionId`: Function ID
+    - `example`: Usage example
+
+- **update_function_purpose**: Update the purpose of a function
+  - Parameters:
+    - `functionId`: Function ID
+    - `purpose`: New purpose
+
+- **get_related_api_endpoints**: Get related API endpoints for a function
+  - Parameters:
+    - `functionId`: Function ID
 
 ### Querying
 
-- `query`: Query stored data based on various criteria
-- `get_related_api_endpoints`: Get related API endpoints for a function
-- `get_related_functions`: Get related functions for an API endpoint
+- **query**: Query stored data based on various criteria
+  - Parameters:
+    - `type`: Type of entity to query ('project', 'api-endpoint', 'function', or 'all')
+    - `projectId` (optional): Project ID to filter by
+    - `query` (optional): Search query string
+    - `tags` (optional): Array of tags to filter by
+    - `pathPattern` (optional): Path pattern to filter by (for API endpoints)
+    - `method` (optional): HTTP method to filter by (for API endpoints)
+    - `namePattern` (optional): Function name pattern to filter by
+    - `implementationPath` (optional): Implementation path to filter by
 
+## Available Resources
+
+MCP-CodeNexus also provides the following resources that can be accessed via URIs:
+
+- **projects**: List of all projects
+  - URI: `codenexus://projects`
+
+- **project**: Details of a specific project
+  - URI: `codenexus://projects/{projectId}`
+
+- **api_endpoints**: List of API endpoints for a project
+  - URI: `codenexus://projects/{projectId}/api-endpoints`
+
+- **api_endpoint**: Details of a specific API endpoint
+  - URI: `codenexus://api-endpoints/{endpointId}`
+
+- **functions**: List of functions for a project
+  - URI: `codenexus://projects/{projectId}/functions`
+
+- **function**: Details of a specific function
+  - URI: `codenexus://functions/{functionId}`
 ## Example Workflow
 
 Here's an example of how an AI coding assistant might use MCP-CodeNexus:
